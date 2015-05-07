@@ -1,5 +1,6 @@
 import imp
-jsonrpc = imp.load_source('jsonrpc', '/Users/niki/ownCloud/Main/work/ESSENCE/research/integration/code/stanford-corenlp-python/jsonrpc.py')
+#jsonrpc = imp.load_source('jsonrpc', '/Users/niki/ownCloud/Main/work/ESSENCE/research/integration/code/stanford-corenlp-python/jsonrpc.py')
+jsonrpc = imp.load_source('jsonrpc', os.path.join(os.path.dirname(__file__), 'jsonrpc.py')
 
 import json
 #from jsonrpc import ServerProxy, JsonRpc20, TransportTcpIp
