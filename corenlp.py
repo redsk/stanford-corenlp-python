@@ -41,6 +41,12 @@ def remove_id(word):
     """Removes the numeric suffix from the parsed recognized words: e.g. 'word-2' > 'word' """
     return word.count("-") == 0 and word or word[0:word.rindex("-")]
 
+def split_id(word):
+    tokens = word.split('-')
+    if len(tokens) > 1:
+        tokens[1] = int(tokens[1])
+    return tokens
+
 
 def parse_bracketed(s):
     '''Parse word features [abc=... def = ...]
@@ -104,7 +110,8 @@ def parse_parser_results(text):
             else:
                 split_entry = re.split("\(|, ", line[:-1])
                 if len(split_entry) == 3:
-                    rel, left, right = map(lambda x: remove_id(x), split_entry)
+                    #rel, left, right = map(lambda x: remove_id(x), split_entry)
+                    rel, left, right = map(lambda x: split_id(x), split_entry)
                     sentence['dependencies'].append(tuple([rel,left,right]))
         
         elif state == STATE_COREFERENCE:
@@ -132,22 +139,28 @@ class StanfordCoreNLP(object):
         Checks the location of the jar files.
         Spawns the server as a process.
         """
-        jars = ["stanford-corenlp-3.4.1.jar",
-                "stanford-corenlp-3.4.1-models.jar",
+        jars = ["stanford-corenlp-3.5.1.jar",
+                "stanford-corenlp-3.5.1-models.jar",
                 "joda-time.jar",
                 "xom.jar",
                 "jollyday.jar"]
+        #jars = ["stanford-corenlp-3.4.1.jar",
+        #        "stanford-corenlp-3.4.1-models.jar",
+        #        "joda-time.jar",
+        #        "xom.jar",
+        #        "jollyday.jar"]
        
         # if CoreNLP libraries are in a different directory,
         # change the corenlp_path variable to point to them
         if not corenlp_path:
-            corenlp_path = "./stanford-corenlp-full-2014-08-27/"
+            corenlp_path = "./stanford-corenlp-full-2015-01-30/"
+            #corenlp_path = "./stanford-corenlp-full-2014-08-27/"
         
         java_path = "java"
         classname = "edu.stanford.nlp.pipeline.StanfordCoreNLP"
         # include the properties file, so you can change defaults
         # but any changes in output format will break parse_parser_results()
-        props = "-props default.properties" 
+        props = "-props default.properties"
         
         # add and check classpaths
         jars = [corenlp_path + jar for jar in jars]

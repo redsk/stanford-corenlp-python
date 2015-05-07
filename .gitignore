@@ -2,3 +2,5 @@
 /stanford-corenlp-*
 .*project
 
+#redsk
+corenlp.py.old
